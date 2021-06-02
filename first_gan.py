@@ -101,6 +101,8 @@ class DiscriminatorNet(torch.nn.Module):
         self.conv1 = nn.Conv2d(
                 in_channels = 3, out_channels = 30, kernel_size= 7, stride = 1,padding = 0)
 
+        self.bc1 = nn.BatchNorm2d(30)
+
         """
         
         Formula for calculating the Output height and width after the tensor passes through a kernel
@@ -124,11 +126,17 @@ class DiscriminatorNet(torch.nn.Module):
         self.conv2 = nn.Conv2d(
             in_channels = 30, out_channels=100, kernel_size = 5, stride = 1, padding = 0)
 
+        self.bc2 = nn.BatchNorm2d(100)
+
         self.conv3 = nn.Conv2d(
             in_channels = 100, out_channels = 30,kernel_size = 3,stride = 1, padding = 0)
 
+        self.bc3 = nn.BatchNorm2d(30)
+
         self.conv4 = nn.Conv2d(
             in_channels = 30, out_channels = 10, kernel_size = 5, stride = 1, padding = 0)
+
+        self.bc4 = nn.BatchNorm2d(10)
 
         #self.flatten = torch.flatten()
 
@@ -144,18 +152,22 @@ class DiscriminatorNet(torch.nn.Module):
 
     def forward(self,x):
         x = self.conv1(x)
+        x = self.bc1(x)
         x = self.relu(x)
         x = self.max_pool(x)
 
         x = self.conv2(x)
+        x = self.bc2(x)
         x = self.relu(x)
         x = self.max_pool(x)
 
         x = self.conv3(x)
+        x = self.bc3(x)
         x = self.relu(x)
         x = self.max_pool(x)
 
         x = self.conv4(x)
+        x = self.bc4(x)
         x = self.relu(x)
         x = self.max_pool(x)
 
